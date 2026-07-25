@@ -4,393 +4,90 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gori Didi - Authentic Indian Products</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --primary: #a42f36;
-            --primary-dark: #7a2227;
-            --accent: #d4af37;
-            --accent-light: #e8c855;
-            --text: #1a1a1a;
-            --text-secondary: #666;
-            --bg-light: #f9f5f0;
-            --white: #ffffff;
-            --border: #ebe5dd;
-            --success: #27ae60;
-            --error: #e74c3c;
-        }
-        html, body { height: 100%; width: 100%; }
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif; 
-            background: var(--bg-light); 
-            color: var(--text); 
-            line-height: 1.6;
-            background-attachment: fixed;
-            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect fill="%23f9f5f0"/><circle cx="50" cy="50" r="30" fill="%23a42f36" opacity="0.02"/></svg>');
-        }
-        .app { display: flex; flex-direction: column; min-height: 100vh; }
-        
-        .header {
-            background: var(--white);
-            border-bottom: 3px solid var(--primary);
-            padding: 1.2rem 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .logo-section { display: flex; align-items: center; gap: 1rem; }
-        .logo-img { height: 50px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
-        .brand-name { font-size: 1.5rem; font-weight: 700; color: var(--primary); letter-spacing: -0.5px; }
-        
-        .nav-main { display: flex; gap: 2.5rem; align-items: center; }
-        .nav-btn { background: none; border: none; color: var(--text); cursor: pointer; font-size: 1rem; font-weight: 500; padding: 0.5rem 0; transition: all 0.3s ease; position: relative; }
-        .nav-btn:hover { color: var(--primary); }
-        .nav-btn::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--accent); transition: width 0.3s ease; }
-        .nav-btn:hover::after { width: 100%; }
-        
-        .nav-right { display: flex; gap: 2rem; align-items: center; }
-        .lang-select { 
-            background: var(--bg-light); 
-            border: 2px solid var(--border); 
-            padding: 0.6rem 1rem; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            color: var(--text); 
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        .lang-select:hover { border-color: var(--primary); }
-        .lang-select:focus { outline: none; border-color: var(--primary); }
-        
-        .cart-icon { cursor: pointer; font-size: 1.4rem; position: relative; transition: transform 0.2s ease; }
-        .cart-icon:hover { transform: scale(1.1); }
-        .cart-badge { position: absolute; top: -8px; right: -8px; background: var(--error); color: var(--white); border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; }
-        
-        .main { flex: 1; padding: 3rem 2rem; max-width: 1400px; width: 100%; margin: 0 auto; }
-        
-        .hero {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: var(--white);
-            padding: 5rem 3rem;
-            border-radius: 20px;
-            text-align: center;
-            margin-bottom: 4rem;
-            box-shadow: 0 10px 40px rgba(164, 47, 54, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            border-radius: 50%;
-        }
-        .hero h1 { font-size: 3.5rem; margin-bottom: 1rem; font-weight: 700; position: relative; z-index: 1; }
-        .hero p { font-size: 1.25rem; opacity: 0.95; margin-bottom: 2.5rem; position: relative; z-index: 1; }
-        
-        .btn {
-            padding: 1rem 2.5rem;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-block;
-            text-decoration: none;
-        }
-        .btn-primary { background: var(--accent); color: var(--primary); }
-        .btn-primary:hover { background: var(--accent-light); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(212, 175, 55, 0.4); }
-        .btn-primary:active { transform: translateY(-1px); }
-        
-        .btn-small { padding: 0.8rem 1.5rem; font-size: 0.95rem; }
-        .btn-dark { background: var(--primary-dark); color: var(--white); }
-        .btn-dark:hover { background: var(--primary); transform: translateY(-2px); }
-        
-        .section-title { font-size: 2.2rem; color: var(--primary); margin: 3rem 0 2rem; font-weight: 700; letter-spacing: -0.5px; }
-        
-        .grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); 
-            gap: 2.5rem; 
-            margin-top: 2rem;
-        }
-        
-        .card {
-            background: var(--white);
-            border-radius: 16px;
-            border: 1px solid var(--border);
-            overflow: hidden;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-        }
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 16px 40px rgba(0,0,0,0.12);
-        }
-        .card-img {
-            height: 220px;
-            background: linear-gradient(135deg, #faf6f0 0%, #f0e8df 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4.5rem;
-            font-weight: 100;
-        }
-        .card-body { padding: 1.8rem; }
-        .card-category {
-            font-size: 0.8rem;
-            color: var(--primary);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.8rem;
-        }
-        .card-title {
-            font-weight: 600;
-            font-size: 1.15rem;
-            margin-bottom: 0.5rem;
-            color: var(--text);
-        }
-        .card-price {
-            font-size: 1.5rem;
-            color: var(--accent);
-            font-weight: 700;
-            margin: 1rem 0;
-        }
-        .card-btn { width: 100%; }
-        
-        .categories {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-        .cat-btn {
-            padding: 0.8rem 1.8rem;
-            border: 2px solid var(--primary);
-            background: var(--white);
-            color: var(--primary);
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        .cat-btn:hover { transform: translateY(-2px); }
-        .cat-btn.active {
-            background: var(--primary);
-            color: var(--white);
-        }
-        
-        .hidden { display: none !important; }
-        
-        .admin-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2.5rem;
-            margin-bottom: 2.5rem;
-        }
-        .section {
-            background: var(--white);
-            padding: 2.5rem;
-            border-radius: 16px;
-            border: 1px solid var(--border);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-        }
-        .section-title-2 {
-            color: var(--primary);
-            font-size: 1.4rem;
-            margin-bottom: 1.8rem;
-            font-weight: 700;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 0.7rem;
-            font-weight: 600;
-            color: var(--text);
-            font-size: 0.95rem;
-        }
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            font-size: 1rem;
-            font-family: inherit;
-            transition: all 0.3s ease;
-        }
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(164, 47, 54, 0.1);
-        }
-        
-        .product-item {
-            background: var(--bg-light);
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 1.2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
-        }
-        .product-item:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
-        .product-info { flex: 1; }
-        .product-name { font-weight: 600; color: var(--text); }
-        .product-meta { font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem; }
-        
-        .btn-delete {
-            background: var(--error);
-            color: var(--white);
-            border: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        .btn-delete:hover { background: #c0392b; transform: translateY(-2px); }
-        
-        .cart-container {
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 2rem;
-        }
-        .cart-item {
-            display: flex;
-            gap: 2rem;
-            padding: 1.8rem;
-            border-bottom: 1px solid var(--border);
-            align-items: flex-start;
-        }
-        .cart-item:last-child { border-bottom: none; }
-        .cart-item-img {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(135deg, #faf6f0 0%, #f0e8df 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            flex-shrink: 0;
-        }
-        .cart-item-details { flex: 1; }
-        .cart-item-details > div:first-child { font-weight: 600; font-size: 1.15rem; color: var(--text); }
-        .cart-item-category { font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem; }
-        .qty-control {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            margin-top: 1rem;
-        }
-        .qty-control input {
-            width: 70px;
-            padding: 0.6rem;
-        }
-        .qty-control button {
-            padding: 0.6rem 1rem;
-            background: var(--primary);
-            color: var(--white);
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        .qty-control button:hover { background: var(--primary-dark); }
-        
-        .cart-price { font-weight: 700; color: var(--accent); text-align: right; }
-        
-        .cart-summary {
-            background: var(--bg-light);
-            padding: 2rem;
-            border-radius: 16px;
-            margin-top: 2rem;
-            text-align: right;
-            border: 2px solid var(--border);
-        }
-        .cart-total {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 2rem;
-        }
-        
-        .footer {
-            background: var(--primary-dark);
-            color: var(--white);
-            padding: 2.5rem;
-            text-align: center;
-            margin-top: 4rem;
-            font-weight: 500;
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: var(--text-secondary);
-        }
-        .empty-state-icon { font-size: 4rem; margin-bottom: 1rem; opacity: 0.5; }
-        
-        @media (max-width: 768px) {
-            .admin-grid { grid-template-columns: 1fr; }
-            .header { flex-direction: column; gap: 1.5rem; }
-            .nav-main { gap: 1.5rem; }
-            .hero h1 { font-size: 2rem; }
-            .grid { grid-template-columns: 1fr 1fr; }
-            .cart-item { flex-direction: column; }
-        }
-    </style>
+    <meta name="description" content="Gori Didi brings authentic Indian fashion, textiles and decor - sourced directly from artisans and markets across India - straight to your door.">
+    <meta property="og:title" content="Gori Didi - Authentic Indian Products">
+    <meta property="og:description" content="Authentic Indian fashion, textiles and decor, sourced directly from artisans across India.">
+    <meta property="og:image" content="gori-logo-300.png">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#a42f36">
+    <link rel="icon" href="gori-logo-300.png" type="image/png">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <div class="app">
     <header class="header">
         <div class="logo-section">
-            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQcAAABZCAYAAAAzWOGUAAAgAElEQVR42u2deZxkRZXvfxF3y33f\nK2vJquqtGmixRQURXBjEEWcUafSJiI4Cgziio87oLPJane2NivuCDoiACjo67rgBLbIpyN5Ad9e+\n5L7vN/PGeX9kVdN7V1VXVzVMfj+f/Hyq8t4b98TJuOdGnDhxAujSpUuXLl26dOnSpUuXLl26dOnS\npUuXLl26dOnSpUuXLl26dOnSpUuX5zBsrQU4kBuc/S4Z5sEWox6J4CeQkwgaA2eCockhSowhbUjK\nnKQbY5eWn86utcxdujwfWXPjcJNnOCoEezWBnUXAqYzx9e1Kzaq3yiC0IWCAIOaFZWCQwKFAkaxQ\nHfYGkdgDhoch2O851F+/vfjY+FrXqUuX5wNrYhxucfa5W0y7GFx5K+mt0yuVGQi0IcMMhVkhaSZw\nRQIYA2P7i0hEABGobcBoNNGiGlqogoHDagpDNpv/JIT4LlTppnemdybWWsFdujwfWVXjcJN3wwYB\n/hHRbF1crIwrEjSYFS9kiwXgDCBaZi061xrVBuqtLFqowWmNQTaZvg9D/+TbC7sfXc16dunyfGBV\njMP17qFemZs/Uy+kLqwbaVikEFSbE+BYvkE4bI0YGAF6pYxqOw4NLli8kdvB2ldfmnl612rUt0uX\n5wPH3Tjc5D/lE41y9p+qjVnYtT7IVitIiNWpHOcw6g2U6pMwcS+s7tDno1nPB1+JHe1VEaBLl+cw\nx804fMv/gi1Go/r9fHn3sE0JQ7O5QWSsTSW5BL1SQlmfgdM+lNBMtgvfln70njURpkuX5wjHxTjc\n4j/lE41y9p+qjVnYtT7IVitIiNWpHOcw6g2U6pMwcS+s7tDno1nPB1+JHe1VEaBLl+cw61jRK3QS\nS3LiDENJ+s9dXrk42ZCHqQb5HsKZ3EWcZH/zTdOvFSbHT32/FJxuLODiWkzXflZyVLu8H9rN2dLB\nMuLlp6u7BdAFo5UYtV2ky+7DKx7Ml9dY4jpJN+nFLVUlsKrGQdPpx6SXCGFP0qEBMkSpwHVK1YXF\npOkCvz7CdStZRLqIpNOzJKnV7Yx6W2IzTwdwSJKMqhPnVOvLvnfj9t5eFxFw37Cf5CU+j+k89VZ+\nvWYjp5JXiDJ2IqOa7FfZ7H3F6Fb6I0mWNqqvFZJnEqD2e0DvDyOY9M2khBjXV3pCRH+zzSt/XMZE\nrQnYZdkJvOmwf+LhpZlJX3xZK/Qn45Zh9AvPa8tEPh8Rjcw6lvNXDnqDqgJ8TBuVZkc4rCgcbIL\njT/eoHLvakKl75BdYCG+CkDWHnpxaLoGMJjGN0n8MwPx7+P9VKrAP4M+/oQB1+8W+D3z/ryYVnxp\nnbNWBrHQI0qkUjPBL8XAv9ZQVPB9g2KhfXb4FVJDP88z+PaMR6K6GPPD4KY0eRxXOl+jPWJvK6r\nhuglxKgXtqJ5nX8xOjKPXlrDk+bw5T0Yv/rB2gqPYHOhPyVzNvODI3CvLgVKzPJKzLmXmBT4wM7d\nYR9vLG6hlP/X1dXV8yGgJQXM8dKHC+G8v6A5gJyNfVR+tVBvWjvf1M8/5qpklmYBvQbF5JCPGwlj\nKxFQJ1bKjjkMaavUc61KGnZRzxkBvFMF2Q9ssgKg6xNKkG1SRVX4Bsi1kLHcItvfvJ5/oMrPFfnB\nrHhCfZ4Ap0pV9TJ9RJqvRhtPpCd6LKrFfvD2o60gHDO+e2y6e4Sv2C8v0sM4L+9sB2pMqN6cQxGB\nGxA7LmJ4PH3S5L7LSE4R3c+NqVmVJ3VGFtqzMsS45cXHt2HdkEfLxO/XSXn1aQlNK9V1BVP4ayvK\nfxQ9u3dHYfBWbgnFI0mKXY0C5TG5EM5aMN8D3FnDsQzwzZmaBYasbHdtxzk5xRLyW4wsgEh1W+B9\nTkJ34Ydlo8BvU8zWMX35IXY2G6aHFyVPeS8Zh6/p4LPCFe7cGmk8WPkqRvQsNf9a+DzF25VxuKeN\njb2VHlkHdvH7JL0iMzrXlwFT3oFu/dPRBhxX7Z8/ZnWNw2i1GvfIpbP8aQjGIUbnc7J9Q9M3PtaP\nvWx9cKqwc1k3d6OL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvX\nC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL\n1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvX\nC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL\n1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvX\nC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL\n1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvX\nC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL\n1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvX\nC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL\n1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvX\nC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL\n1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvX\nC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL\n1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvX\nC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL1wvXC9cL\nIAElFTkSuQmCC" alt="Gori Didi Logo" class="logo-img">
-            <div class="brand-name">Gori Didi</div>
+            <img id="logoImg" src="gori-logo-300.png" alt="Gori Didi logo" class="logo-img" onerror="this.classList.add('hidden'); document.getElementById('logoFallback').classList.remove('hidden')">
+            <span id="logoFallback" class="logo-fallback hidden">GD</span>
+            <div>
+                <div class="brand-name" id="brandName">Gori Didi</div>
+                <div class="brand-tagline" data-en="From India" data-es="Desde India"></div>
+            </div>
         </div>
-        <nav class="nav-main">
+        <button class="nav-toggle" id="navToggle" onclick="toggleNav()" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+        <nav class="nav-main" id="navMain">
             <button class="nav-btn" onclick="showPage('landing')" data-en="Home" data-es="Inicio"></button>
             <button class="nav-btn" onclick="showPage('catalog')" data-en="Products" data-es="Productos"></button>
             <button class="nav-btn" onclick="showPage('admin')" data-en="Admin" data-es="Administrador"></button>
         </nav>
         <div class="nav-right">
-            <select class="lang-select" onchange="switchLang(this.value)">
+            <select class="lang-select" onchange="switchLang(this.value)" aria-label="Language">
                 <option value="en">English</option>
                 <option value="es">Español</option>
             </select>
-            <div class="cart-icon" onclick="showPage('cart')">🛒<span class="cart-badge" id="cartCount">0</span></div>
+            <button class="cart-icon" onclick="showPage('cart')" aria-label="Cart">🛒<span class="cart-badge" id="cartCount">0</span></button>
         </div>
     </header>
 
     <main class="main">
         <div id="landing" class="page">
-            <div class="hero">
-                <h1 id="heroTitle" data-en="Authentic Indian Products" data-es="Productos Indios Auténticos"></h1>
-                <p data-en="Discover the beauty and craftsmanship of India with our curated collection" data-es="Descubre la belleza y artesanía de India con nuestra colección seleccionada"></p>
+            <div class="hero" id="hero">
+                <h1 id="heroTitle"></h1>
+                <p id="heroSub"></p>
                 <button class="btn btn-primary" onclick="showPage('catalog')" data-en="Shop Now" data-es="Comprar Ahora"></button>
             </div>
+
+            <div class="trust-strip">
+                <div class="trust-item">
+                    <div class="icon">🧵</div>
+                    <div class="label" data-en="Directly Sourced" data-es="Compra Directa"></div>
+                    <div class="desc" data-en="From artisans and markets across India" data-es="De artesanos y mercados de India"></div>
+                </div>
+                <div class="trust-item">
+                    <div class="icon">✋</div>
+                    <div class="label" data-en="Handmade Quality" data-es="Calidad Artesanal"></div>
+                    <div class="desc" data-en="Traditional craftsmanship, made to last" data-es="Artesanía tradicional y duradera"></div>
+                </div>
+                <div class="trust-item">
+                    <div class="icon">💬</div>
+                    <div class="label" data-en="WhatsApp Support" data-es="Soporte por WhatsApp"></div>
+                    <div class="desc" data-en="Order and ask questions directly" data-es="Pide y pregunta directamente"></div>
+                </div>
+                <div class="trust-item">
+                    <div class="icon">🌍</div>
+                    <div class="label" data-en="Worldwide Shipping" data-es="Envíos al Mundo"></div>
+                    <div class="desc" data-en="Bringing India to your doorstep" data-es="Llevamos India hasta tu puerta"></div>
+                </div>
+            </div>
+
+            <div class="story">
+                <div class="story-content">
+                    <div class="story-text">
+                        <h2 data-en="Our Story" data-es="Nuestra Historia"></h2>
+                        <p data-en="Gori Didi started with a backpack, a camera and a deep love for India - crossing swinging footbridges in Himachal, bargaining for bangles in crowded bazaars, and riding camels into the Jaisalmer desert."
+                           data-es="Gori Didi nació con una mochila, una cámara y un amor profundo por India - cruzando puentes colgantes en Himachal, regateando pulseras en bazares llenos de vida y montando camellos en el desierto de Jaisalmer."></p>
+                        <p data-en="Every product we sell is chosen from those same markets and artisans, so you can bring a piece of that journey home."
+                           data-es="Cada producto que vendemos se elige de esos mismos mercados y artesanos, para que puedas llevarte a casa un pedazo de ese viaje."></p>
+                    </div>
+                    <div class="story-gallery">
+                        <div class="story-thumb"><span class="thumb-icon">🛕</span><img src="6.jpg" alt="Meeting a sadhu at the ancient temple ruins of Hampi" loading="lazy" onerror="this.style.display='none'"></div>
+                        <div class="story-thumb"><span class="thumb-icon">💍</span><img src="3.jpg" alt="Women trying on bangles at an Indian market stall" loading="lazy" onerror="this.style.display='none'"></div>
+                        <div class="story-thumb"><span class="thumb-icon">🧸</span><img src="4.jpg" alt="Colorful wooden toys at a local shop" loading="lazy" onerror="this.style.display='none'"></div>
+                        <div class="story-thumb"><span class="thumb-icon">🐫</span><img src="5.jpg" alt="Travelers with camel near the Jaisalmer fort" loading="lazy" onerror="this.style.display='none'"></div>
+                    </div>
+                </div>
+            </div>
+
             <h2 class="section-title" data-en="Featured Products" data-es="Productos Destacados"></h2>
             <div class="grid" id="featuredGrid"></div>
         </div>
@@ -408,7 +105,7 @@
 
         <div id="admin" class="page hidden">
             <h1 class="section-title" data-en="Admin Panel" data-es="Panel de Administrador"></h1>
-            
+
             <div id="loginForm" class="section" style="max-width: 400px;">
                 <h2 class="section-title-2" data-en="Login" data-es="Iniciar Sesión"></h2>
                 <div class="form-group">
@@ -436,7 +133,11 @@
                         </div>
                         <div class="form-group">
                             <label data-en="Hero Subtitle" data-es="Subtítulo del Hero"></label>
-                            <input type="text" id="heroSub">
+                            <input type="text" id="heroSubIn">
+                        </div>
+                        <div class="form-group">
+                            <label data-en="WhatsApp Number (with country code)" data-es="Número de WhatsApp (con código de país)"></label>
+                            <input type="text" id="bizWhatsapp" placeholder="15551234567">
                         </div>
                         <button class="btn btn-primary btn-small" onclick="saveBiz()" data-en="Save" data-es="Guardar"></button>
                     </div>
@@ -459,7 +160,12 @@
                         </div>
                         <div class="form-group">
                             <label data-en="Price USD" data-es="Precio USD"></label>
-                            <input type="number" id="prodPrice" step="0.01">
+                            <input type="number" id="prodPrice" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label data-en="Image URL (optional)" data-es="URL de Imagen (opcional)"></label>
+                            <input type="text" id="prodImg" placeholder="https://...">
+                            <div class="form-hint" data-en="Leave empty to use an emoji placeholder" data-es="Déjalo vacío para usar un emoji de referencia"></div>
                         </div>
                         <button class="btn btn-primary btn-small" onclick="addProd()" data-en="Add" data-es="Agregar"></button>
                     </div>
@@ -476,231 +182,16 @@
     </main>
 
     <footer class="footer">
-        <p>&copy; 2024 Gori Didi - <span data-en="Authentic Indian Products" data-es="Productos Indios Auténticos"></span></p>
+        <div class="footer-brand" id="footerBrand">Gori Didi</div>
+        <p data-en="Authentic Indian Products" data-es="Productos Indios Auténticos"></p>
+        <div class="footer-links">
+            <a href="#" id="footerWhatsapp" data-en="WhatsApp" data-es="WhatsApp"></a>
+            <a href="#" onclick="showPage('catalog'); return false;" data-en="Shop" data-es="Tienda"></a>
+        </div>
+        <p class="footer-copy">&copy; <span id="year"></span> <span id="footerBrand2">Gori Didi</span></p>
     </footer>
 </div>
 
-<script>
-const dict = {
-    en: {
-        'Home': 'Home', 'Products': 'Products', 'Admin': 'Admin', 'Authentic Indian Products': 'Authentic Indian Products',
-        'Discover the beauty and craftsmanship of India with our curated collection': 'Discover the beauty and craftsmanship of India with our curated collection',
-        'Shop Now': 'Shop Now', 'Featured Products': 'Featured Products', 'Our Collections': 'Our Collections', 'Shopping Cart': 'Shopping Cart',
-        'Admin Panel': 'Admin Panel', 'Login': 'Login', 'Email': 'Email', 'Password': 'Password', 'Business Settings': 'Business Settings',
-        'Business Name': 'Business Name', 'Hero Title': 'Hero Title', 'Hero Subtitle': 'Hero Subtitle', 'Save': 'Save', 'Add Product': 'Add Product',
-        'Product Name': 'Product Name', 'Category': 'Category', 'Price USD': 'Price USD', 'Add': 'Add', 'Products': 'Products', 'Logout': 'Logout',
-        'Cart is empty': 'Cart is empty', 'Total': 'Total', 'Checkout via WhatsApp': 'Checkout via WhatsApp', 'Remove': 'Remove', 'Delete': 'Delete',
-        'Add to Cart': 'Add to Cart'
-    },
-    es: {
-        'Home': 'Inicio', 'Products': 'Productos', 'Admin': 'Administrador', 'Authentic Indian Products': 'Productos Indios Auténticos',
-        'Discover the beauty and craftsmanship of India with our curated collection': 'Descubre la belleza y artesanía de India con nuestra colección seleccionada',
-        'Shop Now': 'Comprar Ahora', 'Featured Products': 'Productos Destacados', 'Our Collections': 'Nuestras Colecciones', 'Shopping Cart': 'Carrito de Compras',
-        'Admin Panel': 'Panel de Administrador', 'Login': 'Iniciar Sesión', 'Email': 'Correo Electrónico', 'Password': 'Contraseña', 'Business Settings': 'Configuración del Negocio',
-        'Business Name': 'Nombre del Negocio', 'Hero Title': 'Título del Hero', 'Hero Subtitle': 'Subtítulo del Hero', 'Save': 'Guardar', 'Add Product': 'Agregar Producto',
-        'Product Name': 'Nombre del Producto', 'Category': 'Categoría', 'Price USD': 'Precio USD', 'Add': 'Agregar', 'Products': 'Productos', 'Logout': 'Cerrar Sesión',
-        'Cart is empty': 'Carrito vacío', 'Total': 'Total', 'Checkout via WhatsApp': 'Comprar por WhatsApp', 'Remove': 'Eliminar', 'Delete': 'Borrar',
-        'Add to Cart': 'Agregar al Carrito'
-    }
-};
-
-let lang = 'en';
-let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-let prods = JSON.parse(localStorage.getItem('prods') || '[]');
-let biz = JSON.parse(localStorage.getItem('biz') || '{}');
-
-function switchLang(l) { lang = l; document.documentElement.lang = l; updateTexts(); }
-
-function updateTexts() {
-    document.querySelectorAll('[data-en]').forEach(el => {
-        const key = el.getAttribute('data-en');
-        el.textContent = dict[lang][key] || key;
-    });
-}
-
-if (!prods.length) {
-    prods = [
-        { id: 1, name: 'Kurtis Women', cat: 'MODA', price: 35, emoji: '👗' },
-        { id: 2, name: 'Silk Scarves', cat: 'ACCESORIOS', price: 25, emoji: '🧣' },
-        { id: 3, name: 'Bollywood Saree', cat: 'TRAJES', price: 65, emoji: '👚' },
-        { id: 4, name: 'Brass Decorations', cat: 'DECORACIÓN', price: 45, emoji: '🏛️' },
-        { id: 5, name: 'Cotton Cushion', cat: 'TEXTIL', price: 30, emoji: '🛋️' },
-        { id: 6, name: 'Bindi Set', cat: 'ACCESORIOS', price: 12, emoji: '✨' },
-    ];
-    localStorage.setItem('prods', JSON.stringify(prods));
-}
-
-if (!biz.name) biz = { name: 'Gori Didi', heroTitle: 'Authentic Indian Products', heroSub: 'Discover the beauty and craftsmanship of India' };
-
-function showPage(p) {
-    document.querySelectorAll('.page').forEach(x => x.classList.add('hidden'));
-    document.getElementById(p).classList.remove('hidden');
-    if (p === 'landing') render();
-    if (p === 'catalog') { renderCats(); render('all'); }
-    if (p === 'cart') renderCart();
-}
-
-function render(cat = 'all') {
-    const prod = cat === 'all' ? prods.slice(0, 3) : prods.filter(p => p.cat === cat);
-    const html = prod.map(p => `
-        <div class="card">
-            <div class="card-img">${p.emoji}</div>
-            <div class="card-body">
-                <div class="card-category">${p.cat}</div>
-                <div class="card-title">${p.name}</div>
-                <div class="card-price">$${p.price.toFixed(2)}</div>
-                <button class="btn btn-primary btn-small card-btn" onclick="addCart(${p.id})" data-en="Add to Cart" data-es="Agregar al Carrito"></button>
-            </div>
-        </div>
-    `).join('');
-    const grid = document.getElementById(cat === 'all' ? 'featuredGrid' : 'catalogGrid');
-    if (grid) grid.innerHTML = html;
-    updateTexts();
-}
-
-function renderCats() {
-    const cats = ['ALL', ...new Set(prods.map(p => p.cat))];
-    const html = cats.map(c => `<button class="cat-btn ${c === 'ALL' ? 'active' : ''}" onclick="filterCat(this, '${c}')">${c}</button>`).join('');
-    document.getElementById('catsContainer').innerHTML = html;
-}
-
-function filterCat(btn, c) {
-    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    render(c === 'ALL' ? 'all' : c);
-}
-
-function addCart(id) {
-    const p = prods.find(x => x.id === id);
-    const ex = cart.find(x => x.id === id);
-    if (ex) ex.qty++; else cart.push({ ...p, qty: 1 });
-    localStorage.setItem('cart', JSON.stringify(cart));
-    document.getElementById('cartCount').textContent = cart.length;
-}
-
-function renderCart() {
-    if (!cart.length) {
-        document.getElementById('cartView').innerHTML = `<div class="empty-state"><div class="empty-state-icon">🛒</div><p data-en="Cart is empty" data-es="Carrito vacío"></p></div>`;
-        updateTexts();
-        return;
-    }
-    const tot = cart.reduce((s, p) => s + (p.price * p.qty), 0);
-    const html = `
-        ${cart.map(p => `
-            <div class="cart-item">
-                <div class="cart-item-img">${p.emoji}</div>
-                <div class="cart-item-details">
-                    <div>${p.name}</div>
-                    <div class="cart-item-category">${p.cat}</div>
-                    <div class="qty-control">
-                        <input type="number" value="${p.qty}" min="1" onchange="updateQty(${p.id}, this.value)">
-                        <button onclick="rmCart(${p.id})" data-en="Remove" data-es="Eliminar"></button>
-                    </div>
-                </div>
-                <div class="cart-price">$${(p.price * p.qty).toFixed(2)}</div>
-            </div>
-        `).join('')}
-        <div class="cart-summary">
-            <div class="cart-total"><span data-en="Total" data-es="Total"></span>: $${tot.toFixed(2)}</div>
-            <button class="btn btn-primary" onclick="checkoutWA()" style="width:100%" data-en="Checkout via WhatsApp" data-es="Comprar por WhatsApp"></button>
-        </div>
-    `;
-    document.getElementById('cartView').innerHTML = html;
-    updateTexts();
-}
-
-function updateQty(id, q) {
-    const it = cart.find(p => p.id === id);
-    if (it) it.qty = Math.max(1, parseInt(q) || 1);
-    localStorage.setItem('cart', JSON.stringify(cart));
-    renderCart();
-}
-
-function rmCart(id) {
-    cart = cart.filter(p => p.id !== id);
-    localStorage.setItem('cart', JSON.stringify(cart));
-    document.getElementById('cartCount').textContent = cart.length;
-    renderCart();
-}
-
-function checkoutWA() {
-    if (!cart.length) return;
-    const tot = cart.reduce((s, p) => s + (p.price * p.qty), 0);
-    const its = cart.map(p => `${p.name} x${p.qty} - $${(p.price * p.qty).toFixed(2)}`).join('%0A');
-    const msg = `Hello! I'd like to order:%0A%0A${its}%0A%0ATotal: $${tot.toFixed(2)}`;
-    window.open(`https://wa.me/?text=${msg}`);
-}
-
-function adminLogin() {
-    const e = document.getElementById('email').value;
-    const p = document.getElementById('pwd').value;
-    if (e === 'oscar@gorididi.com' && p === 'gori2024') {
-        document.getElementById('loginForm').classList.add('hidden');
-        document.getElementById('adminPanel').classList.remove('hidden');
-        document.getElementById('bizName').value = biz.name;
-        document.getElementById('heroTit').value = biz.heroTitle;
-        document.getElementById('heroSub').value = biz.heroSub;
-        renderProds();
-    } else {
-        alert('Invalid credentials');
-    }
-}
-
-function adminLogout() {
-    document.getElementById('loginForm').classList.remove('hidden');
-    document.getElementById('adminPanel').classList.add('hidden');
-    document.getElementById('email').value = '';
-    document.getElementById('pwd').value = '';
-}
-
-function saveBiz() {
-    biz = {
-        name: document.getElementById('bizName').value,
-        heroTitle: document.getElementById('heroTit').value,
-        heroSub: document.getElementById('heroSub').value
-    };
-    localStorage.setItem('biz', JSON.stringify(biz));
-    document.querySelector('.brand-name').textContent = biz.name;
-    document.getElementById('heroTitle').textContent = biz.heroTitle;
-    alert('Saved!');
-}
-
-function addProd() {
-    const nm = document.getElementById('prodName').value;
-    const ct = document.getElementById('prodCat').value;
-    const pr = parseFloat(document.getElementById('prodPrice').value);
-    if (nm && pr) {
-        prods.push({ id: Date.now(), name: nm, cat: ct, price: pr, emoji: '📦' });
-        localStorage.setItem('prods', JSON.stringify(prods));
-        document.getElementById('prodName').value = '';
-        document.getElementById('prodPrice').value = '';
-        renderProds();
-    }
-}
-
-function renderProds() {
-    const html = prods.map(p => `
-        <div class="product-item">
-            <div class="product-info">
-                <div class="product-name">${p.emoji} ${p.name}</div>
-                <div class="product-meta">${p.cat} - $${p.price.toFixed(2)}</div>
-            </div>
-            <button class="btn-delete" onclick="delProd(${p.id})" data-en="Delete" data-es="Borrar"></button>
-        </div>
-    `).join('');
-    document.getElementById('prodsList').innerHTML = html;
-    updateTexts();
-}
-
-function delProd(id) {
-    prods = prods.filter(p => p.id !== id);
-    localStorage.setItem('prods', JSON.stringify(prods));
-    renderProds();
-}
-
-document.getElementById('cartCount').textContent = cart.length;
-showPage('landing');
-updateTexts();
-</script>
+<script src="js/app.js"></script>
 </body>
 </html>
