@@ -3,6 +3,24 @@ const heroDefaults = {
     es: { title: 'Productos Indios Auténticos', sub: 'Descubre la belleza y artesanía de India con nuestra colección seleccionada' }
 };
 
+const storyDefaults = {
+    en: {
+        p1: 'Gori Didi started with a backpack, a camera and a deep love for India - crossing swinging footbridges in Himachal, bargaining for bangles in crowded bazaars, and riding camels into the Jaisalmer desert.',
+        p2: 'Every product we sell is chosen from those same markets and artisans, so you can bring a piece of that journey home.'
+    },
+    es: {
+        p1: 'Gori Didi nació con una mochila, una cámara y un amor profundo por India - cruzando puentes colgantes en Himachal, regateando pulseras en bazares llenos de vida y montando camellos en el desierto de Jaisalmer.',
+        p2: 'Cada producto que vendemos se elige de esos mismos mercados y artesanos, para que puedas llevarte a casa un pedazo de ese viaje.'
+    }
+};
+
+const socialDefaults = {
+    instagram: 'https://www.instagram.com/gorididifromindia/',
+    facebook: 'https://www.facebook.com/gorididifromindia/'
+};
+
+const ADMIN_HASH = '#gd-admin-2026';
+
 let lang = 'en';
 let cart = JSON.parse(localStorage.getItem('cart') || '[]');
 let prods = JSON.parse(localStorage.getItem('prods') || '[]');
@@ -17,6 +35,7 @@ function switchLang(l) {
     document.documentElement.lang = l;
     updateTexts();
     renderHero();
+    renderStory();
 }
 
 // Elements carry both data-en and data-es directly; no separate dictionary to keep in sync.
@@ -33,24 +52,74 @@ function renderHero() {
     document.getElementById('heroSub').textContent = biz.heroSub || def.sub;
 }
 
-function renderBrand() {
-    const name = biz.name || 'Gori Didi';
-    document.getElementById('brandName').textContent = name;
-    document.getElementById('footerBrand').textContent = name;
-    document.getElementById('footerBrand2').textContent = name;
-    document.getElementById('logoFallback').textContent = name.slice(0, 2).toUpperCase();
+function renderStory() {
+    const def = storyDefaults[lang] || storyDefaults.en;
+    document.getElementById('storyP1').textContent = biz.storyP1 || def.p1;
+    document.getElementById('storyP2').textContent = biz.storyP2 || def.p2;
 }
 
-function renderWhatsappLink() {
+function renderBrand() {
+    const name = biz.name || 'Gori Didi';
+    document.getElementById('footerBrand2').textContent = name;
+    document.getElementById('logoFallback').textContent = name.slice(0, 2).toUpperCase();
+    document.title = `${name} - Authentic Indian Products`;
+}
+
+function renderContact() {
+    const email = biz.contactEmail || '';
+    const phone = biz.contactPhone || '';
+    const ig = biz.instagram || socialDefaults.instagram;
+    const fb = biz.facebook || socialDefaults.facebook;
     const num = (biz.whatsapp || '').replace(/[^0-9]/g, '');
-    const msg = encodeURIComponent('Hi! I have a question about your products.');
-    document.getElementById('footerWhatsapp').href = `https://wa.me/${num}?text=${msg}`;
+    const waMsg = encodeURIComponent('Hi! I have a question about your products.');
+    const waHref = `https://wa.me/${num}?text=${waMsg}`;
+
+    const emailLink = document.getElementById('contactEmailLink');
+    if (email) {
+        emailLink.href = `mailto:${email}`;
+        document.getElementById('contactEmailText').textContent = email;
+        emailLink.classList.remove('hidden');
+    } else {
+        emailLink.classList.add('hidden');
+    }
+
+    const phoneLink = document.getElementById('contactPhoneLink');
+    if (phone) {
+        phoneLink.href = `tel:${phone.replace(/[^0-9+]/g, '')}`;
+        document.getElementById('contactPhoneText').textContent = phone;
+        phoneLink.classList.remove('hidden');
+    } else {
+        phoneLink.classList.add('hidden');
+    }
+
+    document.getElementById('contactWaLink').href = waHref;
+    document.querySelectorAll('.js-instagram').forEach(a => a.href = ig);
+    document.querySelectorAll('.js-facebook').forEach(a => a.href = fb);
+    document.getElementById('footerWhatsapp').href = waHref;
+
+    const footerEmail = document.getElementById('footerEmail');
+    if (email) {
+        footerEmail.href = `mailto:${email}`;
+        footerEmail.textContent = email;
+        footerEmail.classList.remove('hidden');
+    } else {
+        footerEmail.classList.add('hidden');
+    }
+}
+
+function openContact() {
+    renderContact();
+    document.getElementById('contactModal').classList.remove('hidden');
+}
+
+function closeContact() {
+    document.getElementById('contactModal').classList.add('hidden');
 }
 
 function toggleNav() {
-    const nav = document.getElementById('navMain');
+    const navEl = document.getElementById('navMain');
     const btn = document.getElementById('navToggle');
-    const open = nav.classList.toggle('open');
+    const open = navEl.classList.toggle('open');
     btn.setAttribute('aria-expanded', open);
 }
 
@@ -58,6 +127,20 @@ function closeNav() {
     document.getElementById('navMain').classList.remove('open');
     document.getElementById('navToggle').setAttribute('aria-expanded', 'false');
 }
+
+// Public nav actions leave the secret admin URL if it's currently set, so
+// browsing away from /#gd-admin-2026 doesn't leave it reopening on refresh.
+function nav(page) {
+    if (location.hash === ADMIN_HASH) {
+        history.replaceState(null, '', location.pathname + location.search);
+    }
+    showPage(page);
+}
+
+function checkAdminHash() {
+    if (location.hash === ADMIN_HASH) showPage('admin');
+}
+window.addEventListener('hashchange', checkAdminHash);
 
 if (!prods.length) {
     prods = [
@@ -78,6 +161,7 @@ function showPage(p) {
     if (p === 'landing') renderFeatured();
     if (p === 'catalog') { renderCats(); renderCatalog('ALL'); }
     if (p === 'cart') renderCart();
+    initReveal();
 }
 
 function handleImgErr(el, emoji) {
@@ -93,7 +177,7 @@ function productImgHtml(p) {
 
 function productCardsHtml(list) {
     return list.map(p => `
-        <div class="card">
+        <div class="card reveal">
             <div class="card-img">${productImgHtml(p)}</div>
             <div class="card-body">
                 <div class="card-category">${esc(p.cat)}</div>
@@ -207,9 +291,15 @@ function adminLogin() {
         document.getElementById('loginForm').classList.add('hidden');
         document.getElementById('adminPanel').classList.remove('hidden');
         document.getElementById('bizName').value = biz.name || '';
+        document.getElementById('bizWhatsapp').value = biz.whatsapp || '';
+        document.getElementById('contactEmail').value = biz.contactEmail || '';
+        document.getElementById('contactPhone').value = biz.contactPhone || '';
+        document.getElementById('instagramIn').value = biz.instagram || socialDefaults.instagram;
+        document.getElementById('facebookIn').value = biz.facebook || socialDefaults.facebook;
         document.getElementById('heroTit').value = biz.heroTitle || '';
         document.getElementById('heroSubIn').value = biz.heroSub || '';
-        document.getElementById('bizWhatsapp').value = biz.whatsapp || '';
+        document.getElementById('storyP1In').value = biz.storyP1 || '';
+        document.getElementById('storyP2In').value = biz.storyP2 || '';
         renderProds();
     } else {
         alert('Invalid credentials');
@@ -226,14 +316,21 @@ function adminLogout() {
 function saveBiz() {
     biz = {
         name: document.getElementById('bizName').value,
+        whatsapp: document.getElementById('bizWhatsapp').value,
+        contactEmail: document.getElementById('contactEmail').value,
+        contactPhone: document.getElementById('contactPhone').value,
+        instagram: document.getElementById('instagramIn').value,
+        facebook: document.getElementById('facebookIn').value,
         heroTitle: document.getElementById('heroTit').value,
         heroSub: document.getElementById('heroSubIn').value,
-        whatsapp: document.getElementById('bizWhatsapp').value
+        storyP1: document.getElementById('storyP1In').value,
+        storyP2: document.getElementById('storyP2In').value
     };
     localStorage.setItem('biz', JSON.stringify(biz));
     renderBrand();
     renderHero();
-    renderWhatsappLink();
+    renderStory();
+    renderContact();
     alert('Saved!');
 }
 
@@ -281,11 +378,32 @@ function initHeroBackdrop() {
     img.src = path;
 }
 
+let revealObserver;
+function initReveal() {
+    if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('.reveal').forEach(el => el.classList.add('reveal-visible'));
+        return;
+    }
+    if (!revealObserver) {
+        revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal-visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+    }
+    document.querySelectorAll('.reveal:not(.reveal-visible)').forEach(el => revealObserver.observe(el));
+}
+
 document.getElementById('year').textContent = new Date().getFullYear();
 updateCartBadge();
 renderBrand();
 renderHero();
-renderWhatsappLink();
+renderStory();
+renderContact();
 initHeroBackdrop();
 showPage('landing');
+checkAdminHash();
 updateTexts();
