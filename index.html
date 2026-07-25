@@ -4,395 +4,329 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gori Didi - Indian Products</title>
-    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/react.production.min.js"></script>
-    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/react-dom.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body, #root { height: 100%; width: 100%; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f1e8; color: #2c2c2a; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f1e8; color: #2c2c2a; }
         .app { display: flex; flex-direction: column; min-height: 100vh; }
-        .header { background: #8b0000; color: white; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .logo-section { display: flex; align-items: center; gap: 1rem; }
-        .logo { height: 40px; width: 40px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700; color: #8b0000; }
-        .logo-text { font-size: 1.3rem; font-weight: 600; }
-        .nav { display: flex; gap: 1.5rem; align-items: center; }
-        .nav button { background: none; border: none; color: white; cursor: pointer; font-size: 1rem; transition: opacity 0.2s; }
+        .header { background: #8b0000; color: white; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+        .logo { display: flex; align-items: center; gap: 1rem; }
+        .logo-text { font-size: 1.5rem; font-weight: 600; }
+        .nav { display: flex; gap: 1rem; }
+        .nav button { background: none; border: none; color: white; cursor: pointer; font-size: 1rem; padding: 0.5rem 1rem; }
         .nav button:hover { opacity: 0.8; }
-        .cart-badge { background: #d4af37; color: #8b0000; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 600; }
         .main { flex: 1; padding: 2rem; max-width: 1200px; width: 100%; margin: 0 auto; }
-        .hero { background-color: #8b0000; color: white; padding: 3rem 2rem; border-radius: 12px; text-align: center; margin-bottom: 2rem; }
+        .hero { background: #8b0000; color: white; padding: 3rem 2rem; border-radius: 12px; text-align: center; margin-bottom: 2rem; }
         .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
-        .hero p { font-size: 1.1rem; opacity: 0.9; margin-bottom: 1.5rem; }
-        .btn { padding: 0.8rem 1.5rem; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 500; transition: all 0.3s; }
+        .btn { padding: 0.8rem 1.5rem; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 500; }
         .btn-primary { background: #d4af37; color: #8b0000; }
-        .btn-primary:hover { background: #c99f31; transform: translateY(-2px); }
-        .btn-secondary { background: white; color: #8b0000; }
-        .btn-secondary:hover { background: #f0f0f0; }
+        .btn-primary:hover { background: #c99f31; }
         .btn-dark { background: #003366; color: white; }
-        .btn-dark:hover { background: #002244; }
-        .btn-small { padding: 0.6rem 1rem; font-size: 0.9rem; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
-        .card { background: white; border-radius: 12px; border: 1px solid #ddd; overflow: hidden; transition: all 0.3s; }
-        .card:hover { box-shadow: 0 8px 16px rgba(0,0,0,0.1); transform: translateY(-4px); }
-        .card-img { width: 100%; height: 180px; background: #e8e4d8; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+        .card { background: white; border-radius: 12px; border: 1px solid #ddd; overflow: hidden; }
+        .card-img { height: 150px; background: #e8e4d8; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
         .card-body { padding: 1rem; }
-        .card-title { font-weight: 600; font-size: 1.1rem; margin-bottom: 0.5rem; color: #8b0000; }
+        .card-title { font-weight: 600; color: #8b0000; margin-bottom: 0.5rem; }
         .card-price { font-size: 1.3rem; color: #d4af37; font-weight: 700; margin: 0.5rem 0; }
-        .card-cat { font-size: 0.85rem; color: #888; }
-        .categories { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; }
-        .cat-btn { padding: 0.6rem 1.2rem; border: 2px solid #8b0000; background: white; color: #8b0000; border-radius: 20px; cursor: pointer; font-weight: 500; transition: all 0.3s; }
-        .cat-btn.active { background: #8b0000; color: white; }
+        .btn-small { padding: 0.6rem 1rem; font-size: 0.9rem; width: 100%; }
+        .hidden { display: none; }
+        .section { background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 1.5rem; }
         .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #2c2c2a; }
-        .form-group input, .form-group select { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
-        .form-group input:focus, .form-group select:focus { outline: none; border-color: #8b0000; }
-        .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
-        .modal-content { background: white; border-radius: 12px; padding: 2rem; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-        .modal-header h2 { color: #8b0000; }
-        .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666; }
-        .cart-item { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid #eee; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .form-group input, .form-group select { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; }
+        .footer { background: #003366; color: white; padding: 1rem; text-align: center; }
+        .cart-item { display: flex; gap: 1rem; padding: 1rem; border-bottom: 1px solid #eee; }
         .cart-item-img { width: 80px; height: 80px; background: #e8e4d8; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 2rem; }
-        .cart-item-details { flex: 1; }
         .cart-total { font-size: 1.3rem; font-weight: 700; color: #8b0000; margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #d4af37; }
-        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-        .section { background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid #ddd; }
-        .section-title { color: #8b0000; font-size: 1.3rem; margin-bottom: 1rem; }
-        .product-item { background: #f9f7f3; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
-        .product-item-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem; }
-        .product-item-name { font-weight: 600; color: #2c2c2a; }
-        .delete-btn { background: #d4475c; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; }
-        .empty-state { text-align: center; padding: 2rem; color: #888; }
-        .footer { background: #003366; color: white; padding: 1rem; text-align: center; font-size: 0.9rem; }
         @media (max-width: 768px) {
-            .header { flex-direction: column; gap: 1rem; }
-            .admin-grid { grid-template-columns: 1fr; }
-            .hero h1 { font-size: 1.8rem; }
             .grid { grid-template-columns: 1fr 1fr; }
+            .hero h1 { font-size: 1.8rem; }
         }
     </style>
 </head>
 <body>
-<div id="root"></div>
-<script type="text/babel">
-const { useState, useEffect } = React;
-
-function GoriDidiApp() {
-    const [currentPage, setCurrentPage] = useState('landing');
-    const [isAdmin, setIsAdmin] = useState(false);
-    const [adminPassword] = useState('gori2024');
-    const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem('cart') || '[]'));
-    const [products, setProducts] = useState(() => {
-        const saved = localStorage.getItem('products');
-        return saved ? JSON.parse(saved) : getDefaultProducts();
-    });
-    const [businessName, setBusinessName] = useState(() => localStorage.getItem('businessName') || 'Gori Didi');
-    const [bannerText, setBannerText] = useState(() => localStorage.getItem('bannerText') || 'Authentic Indian Products');
-
-    function getDefaultProducts() {
-        return [
-            { id: 1, name: 'Kurtis Women', category: 'MODA', price: 35, emoji: '👗' },
-            { id: 2, name: 'Silk Scarves', category: 'ACCESORIOS', price: 25, emoji: '🧣' },
-            { id: 3, name: 'Bollywood Saree', category: 'TRAJES', price: 65, emoji: '👚' },
-            { id: 4, name: 'Brass Decorations', category: 'DECORACIÓN', price: 45, emoji: '🏛️' },
-            { id: 5, name: 'Cotton Cushion', category: 'TEXTIL', price: 30, emoji: '🛋️' },
-            { id: 6, name: 'Bindi Set', category: 'ACCESORIOS', price: 12, emoji: '✨' },
-        ];
-    }
-
-    useEffect(() => {
-        localStorage.setItem('cart', JSON.stringify(cart));
-    }, [cart]);
-
-    useEffect(() => {
-        localStorage.setItem('products', JSON.stringify(products));
-    }, [products]);
-
-    useEffect(() => {
-        localStorage.setItem('businessName', businessName);
-    }, [businessName]);
-
-    useEffect(() => {
-        localStorage.setItem('bannerText', bannerText);
-    }, [bannerText]);
-
-    function addToCart(product) {
-        const existing = cart.find(p => p.id === product.id);
-        if (existing) {
-            setCart(cart.map(p => p.id === product.id ? { ...p, qty: p.qty + 1 } : p));
-        } else {
-            setCart([...cart, { ...product, qty: 1 }]);
-        }
-    }
-
-    function removeFromCart(id) {
-        setCart(cart.filter(p => p.id !== id));
-    }
-
-    function updateQty(id, qty) {
-        if (qty <= 0) {
-            removeFromCart(id);
-        } else {
-            setCart(cart.map(p => p.id === id ? { ...p, qty } : p));
-        }
-    }
-
-    function addProduct(name, category, price) {
-        const newProduct = { id: Date.now(), name, category, price, emoji: '📦' };
-        setProducts([...products, newProduct]);
-    }
-
-    function deleteProduct(id) {
-        setProducts(products.filter(p => p.id !== id));
-    }
-
-    function checkoutWhatsApp() {
-        if (cart.length === 0) return;
-        const total = cart.reduce((sum, p) => sum + (p.price * p.qty), 0);
-        const itemsList = cart.map(p => `${p.name} x${p.qty} - $${(p.price * p.qty).toFixed(2)}`).join('%0A');
-        const msg = `Hello! I'd like to order:%0A%0A${itemsList}%0A%0ATotal: $${total.toFixed(2)}`;
-        window.open(`https://wa.me/?text=${msg}`);
-    }
-
-    return (
-        <div className="app">
-            <header className="header">
-                <div className="logo-section">
-                    <div className="logo">GD</div>
-                    <div className="logo-text">{businessName}</div>
-                </div>
-                <nav className="nav">
-                    <button onClick={() => { setCurrentPage('landing'); setIsAdmin(false); }}>Home</button>
-                    <button onClick={() => setCurrentPage('catalog')}>Products</button>
-                    <button onClick={() => setCurrentPage('cart')}>
-                        Cart {cart.length > 0 && <span className="cart-badge">{cart.length}</span>}
-                    </button>
-                    <button onClick={() => setCurrentPage('admin')}>Admin</button>
-                </nav>
-            </header>
-
-            <main className="main">
-                {currentPage === 'landing' && <LandingPage bannerText={bannerText} products={products} onAddCart={addToCart} setPage={setCurrentPage} />}
-                {currentPage === 'catalog' && <CatalogPage products={products} onAddCart={addToCart} />}
-                {currentPage === 'cart' && <CartPage cart={cart} onRemove={removeFromCart} onUpdateQty={updateQty} onCheckout={checkoutWhatsApp} />}
-                {currentPage === 'admin' && <AdminPage isAdmin={isAdmin} adminPassword={adminPassword} products={products} onAddProduct={addProduct} onDeleteProduct={deleteProduct} businessName={businessName} onSetBusinessName={setBusinessName} bannerText={bannerText} onSetBannerText={setBannerText} setIsAdmin={setIsAdmin} />}
-            </main>
-
-            <footer className="footer">
-                <p>&copy; 2024 {businessName} - Authentic Indian Products</p>
-            </footer>
+<div class="app">
+    <header class="header">
+        <div class="logo">
+            <div style="font-size: 1.5rem;">🇮🇳</div>
+            <div class="logo-text" id="businessName">Gori Didi</div>
         </div>
-    );
-}
+        <nav class="nav">
+            <button onclick="showPage('landing')">Home</button>
+            <button onclick="showPage('catalog')">Products</button>
+            <button onclick="showPage('cart')">Cart (<span id="cartCount">0</span>)</button>
+            <button onclick="showPage('admin')">Admin</button>
+        </nav>
+    </header>
 
-function LandingPage({ bannerText, products, onAddCart, setPage }) {
-    const featured = products.slice(0, 3);
-    return (
-        <>
-            <div className="hero">
-                <h1>🇮🇳 {bannerText}</h1>
+    <main class="main">
+        <div id="landing" class="page">
+            <div class="hero">
+                <h1 id="bannerText">Authentic Indian Products</h1>
                 <p>Discover the beauty and culture of India</p>
-                <button className="btn btn-primary btn-small" onClick={() => setPage('catalog')}>Shop Now</button>
+                <button class="btn btn-primary" onclick="showPage('catalog')">Shop Now</button>
             </div>
-            <h2 style={{color:'#8b0000', marginBottom:'1rem'}}>Featured Products</h2>
-            <div className="grid">
-                {featured.map(p => (
-                    <div key={p.id} className="card">
-                        <div className="card-img">{p.emoji}</div>
-                        <div className="card-body">
-                            <div className="card-cat">{p.category}</div>
-                            <div className="card-title">{p.name}</div>
-                            <div className="card-price">${p.price.toFixed(2)}</div>
-                            <button className="btn btn-primary btn-small" onClick={() => onAddCart(p)} style={{width:'100%'}}>Add to Cart</button>
-                        </div>
-                    </div>
-                ))}
-            </div>
-        </>
-    );
-}
+            <h2 style="color:#8b0000">Featured Products</h2>
+            <div class="grid" id="featuredGrid"></div>
+        </div>
 
-function CatalogPage({ products, onAddCart }) {
-    const [selectedCategory, setSelectedCategory] = useState('ALL');
-    const categories = ['ALL', ...new Set(products.map(p => p.category))];
-    const filtered = selectedCategory === 'ALL' ? products : products.filter(p => p.category === selectedCategory);
+        <div id="catalog" class="page hidden">
+            <h1 style="color:#8b0000; margin-bottom:1rem">Our Products</h1>
+            <div class="grid" id="catalogGrid"></div>
+        </div>
 
-    return (
-        <>
-            <h1 style={{color:'#8b0000', marginBottom:'1rem'}}>Our Products</h1>
-            <div className="categories">
-                {categories.map(cat => (
-                    <button key={cat} className={`cat-btn ${selectedCategory === cat ? 'active' : ''}`} onClick={() => setSelectedCategory(cat)}>
-                        {cat}
-                    </button>
-                ))}
-            </div>
-            <div className="grid">
-                {filtered.length === 0 ? (
-                    <div className="empty-state">No products in this category</div>
-                ) : (
-                    filtered.map(p => (
-                        <div key={p.id} className="card">
-                            <div className="card-img">{p.emoji}</div>
-                            <div className="card-body">
-                                <div className="card-cat">{p.category}</div>
-                                <div className="card-title">{p.name}</div>
-                                <div className="card-price">${p.price.toFixed(2)}</div>
-                                <button className="btn btn-primary btn-small" onClick={() => onAddCart(p)} style={{width:'100%'}}>Add to Cart</button>
-                            </div>
-                        </div>
-                    ))
-                )}
-            </div>
-        </>
-    );
-}
+        <div id="cart" class="page hidden">
+            <h1 style="color:#8b0000; margin-bottom:1.5rem">Shopping Cart</h1>
+            <div class="section" id="cartContent"></div>
+        </div>
 
-function CartPage({ cart, onRemove, onUpdateQty, onCheckout }) {
-    if (cart.length === 0) {
-        return <div className="empty-state"><p style={{fontSize:'1.2rem'}}>Your cart is empty</p></div>;
-    }
-
-    const total = cart.reduce((sum, p) => sum + (p.price * p.qty), 0);
-
-    return (
-        <>
-            <h1 style={{color:'#8b0000', marginBottom:'1.5rem'}}>Shopping Cart</h1>
-            <div style={{background:'white', borderRadius:'12px', padding:'1.5rem', border:'1px solid #ddd'}}>
-                {cart.map(p => (
-                    <div key={p.id} className="cart-item">
-                        <div className="cart-item-img">{p.emoji}</div>
-                        <div className="cart-item-details">
-                            <div style={{fontWeight:'600'}}>{p.name}</div>
-                            <div style={{fontSize:'0.9rem', color:'#888'}}>{p.category}</div>
-                            <div style={{marginTop:'0.5rem'}}>
-                                <input type="number" min="1" value={p.qty} onChange={(e) => onUpdateQty(p.id, parseInt(e.target.value) || 1)} style={{width:'60px', padding:'0.4rem'}} />
-                                <button className="btn btn-dark btn-small" onClick={() => onRemove(p.id)} style={{marginLeft:'0.5rem'}}>Remove</button>
-                            </div>
-                        </div>
-                        <div style={{textAlign:'right'}}>
-                            <div style={{fontSize:'1.2rem', fontWeight:'700', color:'#d4af37'}}>${(p.price * p.qty).toFixed(2)}</div>
-                        </div>
-                    </div>
-                ))}
-                <div className="cart-total">Total: ${total.toFixed(2)}</div>
-                <button className="btn btn-primary btn-small" onClick={onCheckout} style={{width:'100%', marginTop:'1rem', padding:'1rem', fontSize:'1rem'}}>Checkout via WhatsApp</button>
-            </div>
-        </>
-    );
-}
-
-function AdminPage({ isAdmin, adminPassword, products, onAddProduct, onDeleteProduct, businessName, onSetBusinessName, bannerText, onSetBannerText, setIsAdmin }) {
-    const [newProductName, setNewProductName] = useState('');
-    const [newProductCategory, setNewProductCategory] = useState('MODA');
-    const [newProductPrice, setNewProductPrice] = useState('');
-    const [password, setPassword] = useState('');
-    const [loginError, setLoginError] = useState('');
-
-    function handleLogin(e) {
-        e.preventDefault();
-        if (password === adminPassword) {
-            setIsAdmin(true);
-            setLoginError('');
-        } else {
-            setLoginError('Invalid password');
-        }
-    }
-
-    function handleAddProduct(e) {
-        e.preventDefault();
-        if (newProductName && newProductPrice) {
-            onAddProduct(newProductName, newProductCategory, parseFloat(newProductPrice));
-            setNewProductName('');
-            setNewProductPrice('');
-        }
-    }
-
-    if (!isAdmin) {
-        return (
-            <div style={{maxWidth:'400px', margin:'0 auto'}}>
-                <div className="section">
-                    <h2 className="section-title">Admin Login</h2>
-                    <form onSubmit={handleLogin}>
-                        <div className="form-group">
-                            <label>Password</label>
-                            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter admin password" />
-                        </div>
-                        {loginError && <div style={{color:'#d4475c', marginBottom:'1rem'}}>{loginError}</div>}
-                        <button type="submit" className="btn btn-primary btn-small" style={{width:'100%'}}>Login</button>
-                    </form>
+        <div id="admin" class="page hidden">
+            <h1 style="color:#8b0000">Admin Panel</h1>
+            <div id="adminLogin" class="section" style="max-width: 400px;">
+                <h2 style="color:#8b0000; margin-bottom:1rem">Login</h2>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="adminPassword" placeholder="Enter password">
                 </div>
+                <button class="btn btn-primary btn-small" onclick="adminLogin()">Login</button>
             </div>
-        );
-    }
-
-    return (
-        <>
-            <h1 style={{color:'#8b0000', marginBottom:'1.5rem'}}>Admin Dashboard</h1>
-            <div className="admin-grid">
-                <div className="section">
-                    <h2 className="section-title">Business Settings</h2>
-                    <div className="form-group">
+            <div id="adminDash" class="hidden">
+                <div class="section">
+                    <h2 style="color:#8b0000">Business Settings</h2>
+                    <div class="form-group">
                         <label>Business Name</label>
-                        <input type="text" value={businessName} onChange={(e) => onSetBusinessName(e.target.value)} />
+                        <input type="text" id="businessNameInput">
                     </div>
-                    <div className="form-group">
+                    <div class="form-group">
                         <label>Banner Text</label>
-                        <input type="text" value={bannerText} onChange={(e) => onSetBannerText(e.target.value)} />
+                        <input type="text" id="bannerTextInput">
                     </div>
-                    <button className="btn btn-dark btn-small" onClick={() => setIsAdmin(false)}>Logout</button>
+                    <button class="btn btn-primary btn-small" onclick="saveBusiness()">Save</button>
+                    <button class="btn btn-dark btn-small" onclick="adminLogout()" style="margin-top:0.5rem">Logout</button>
                 </div>
-
-                <div className="section">
-                    <h2 className="section-title">Add New Product</h2>
-                    <form onSubmit={handleAddProduct}>
-                        <div className="form-group">
-                            <label>Product Name</label>
-                            <input type="text" value={newProductName} onChange={(e) => setNewProductName(e.target.value)} placeholder="e.g., Silk Saree" />
-                        </div>
-                        <div className="form-group">
-                            <label>Category</label>
-                            <select value={newProductCategory} onChange={(e) => setNewProductCategory(e.target.value)}>
-                                <option>MODA</option>
-                                <option>TRAJES</option>
-                                <option>ACCESORIOS</option>
-                                <option>TEXTIL</option>
-                                <option>DECORACIÓN</option>
-                            </select>
-                        </div>
-                        <div className="form-group">
-                            <label>Price (USD)</label>
-                            <input type="number" step="0.01" value={newProductPrice} onChange={(e) => setNewProductPrice(e.target.value)} placeholder="29.99" />
-                        </div>
-                        <button type="submit" className="btn btn-primary btn-small" style={{width:'100%'}}>Add Product</button>
-                    </form>
+                <div class="section">
+                    <h2 style="color:#8b0000">Add Product</h2>
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" id="productName">
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="productCategory">
+                            <option>MODA</option>
+                            <option>TRAJES</option>
+                            <option>ACCESORIOS</option>
+                            <option>TEXTIL</option>
+                            <option>DECORACIÓN</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Price</label>
+                        <input type="number" id="productPrice" step="0.01">
+                    </div>
+                    <button class="btn btn-primary btn-small" onclick="addProduct()">Add</button>
+                </div>
+                <div class="section">
+                    <h2 style="color:#8b0000">Products</h2>
+                    <div id="productsList"></div>
                 </div>
             </div>
+        </div>
+    </main>
 
-            <div className="section" style={{marginTop:'2rem'}}>
-                <h2 className="section-title">Products ({products.length})</h2>
-                {products.length === 0 ? (
-                    <div className="empty-state">No products yet</div>
-                ) : (
-                    products.map(p => (
-                        <div key={p.id} className="product-item">
-                            <div className="product-item-header">
-                                <div>
-                                    <div className="product-item-name">{p.emoji} {p.name}</div>
-                                    <div style={{fontSize:'0.9rem', color:'#888'}}>{p.category} - ${p.price.toFixed(2)}</div>
-                                </div>
-                                <button className="delete-btn" onClick={() => onDeleteProduct(p.id)}>Delete</button>
-                            </div>
-                        </div>
-                    ))
-                )}
-            </div>
-        </>
-    );
+    <footer class="footer">
+        <p>&copy; 2024 <span id="footerName">Gori Didi</span> - Authentic Indian Products</p>
+    </footer>
+</div>
+
+<script>
+let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+let products = JSON.parse(localStorage.getItem('products') || '[]');
+let businessName = localStorage.getItem('businessName') || 'Gori Didi';
+let bannerText = localStorage.getItem('bannerText') || 'Authentic Indian Products';
+let isAdminLoggedIn = false;
+let adminPassword = 'gori2024';
+
+if (products.length === 0) {
+    products = [
+        { id: 1, name: 'Kurtis Women', category: 'MODA', price: 35, emoji: '👗' },
+        { id: 2, name: 'Silk Scarves', category: 'ACCESORIOS', price: 25, emoji: '🧣' },
+        { id: 3, name: 'Bollywood Saree', category: 'TRAJES', price: 65, emoji: '👚' },
+        { id: 4, name: 'Brass Decorations', category: 'DECORACIÓN', price: 45, emoji: '🏛️' },
+        { id: 5, name: 'Cotton Cushion', category: 'TEXTIL', price: 30, emoji: '🛋️' },
+        { id: 6, name: 'Bindi Set', category: 'ACCESORIOS', price: 12, emoji: '✨' },
+    ];
+    localStorage.setItem('products', JSON.stringify(products));
 }
 
-ReactDOM.render(<GoriDidiApp />, document.getElementById('root'));
+function showPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+    document.getElementById(page).classList.remove('hidden');
+    if (page === 'landing') renderFeatured();
+    if (page === 'catalog') renderCatalog();
+    if (page === 'cart') renderCart();
+}
+
+function renderFeatured() {
+    const html = products.slice(0, 3).map(p => `
+        <div class="card">
+            <div class="card-img">${p.emoji}</div>
+            <div class="card-body">
+                <div class="card-title">${p.name}</div>
+                <div class="card-price">$${p.price.toFixed(2)}</div>
+                <button class="btn btn-primary btn-small" onclick="addToCart(${p.id})">Add to Cart</button>
+            </div>
+        </div>
+    `).join('');
+    document.getElementById('featuredGrid').innerHTML = html;
+}
+
+function renderCatalog() {
+    const html = products.map(p => `
+        <div class="card">
+            <div class="card-img">${p.emoji}</div>
+            <div class="card-body">
+                <div style="font-size:0.85rem; color:#888">${p.category}</div>
+                <div class="card-title">${p.name}</div>
+                <div class="card-price">$${p.price.toFixed(2)}</div>
+                <button class="btn btn-primary btn-small" onclick="addToCart(${p.id})">Add to Cart</button>
+            </div>
+        </div>
+    `).join('');
+    document.getElementById('catalogGrid').innerHTML = html;
+}
+
+function renderCart() {
+    if (cart.length === 0) {
+        document.getElementById('cartContent').innerHTML = '<p style="text-align:center; color:#888">Cart is empty</p>';
+        return;
+    }
+    const total = cart.reduce((sum, p) => sum + (p.price * p.qty), 0);
+    const html = `
+        ${cart.map(p => `
+            <div class="cart-item">
+                <div class="cart-item-img">${p.emoji}</div>
+                <div>
+                    <div style="font-weight:600">${p.name}</div>
+                    <div style="font-size:0.9rem; color:#888">${p.category}</div>
+                    <input type="number" value="${p.qty}" min="1" onchange="updateQty(${p.id}, this.value)" style="width:60px; padding:0.4rem; margin-top:0.5rem">
+                    <button class="btn btn-dark btn-small" onclick="removeFromCart(${p.id})" style="width:auto; padding:0.4rem 0.8rem; margin-left:0.5rem">Remove</button>
+                </div>
+                <div style="text-align:right; font-weight:700; color:#d4af37">$${(p.price * p.qty).toFixed(2)}</div>
+            </div>
+        `).join('')}
+        <div class="cart-total">Total: $${total.toFixed(2)}</div>
+        <button class="btn btn-primary btn-small" onclick="checkoutWhatsApp()" style="margin-top:1rem; padding:1rem; font-size:1rem">Checkout via WhatsApp</button>
+    `;
+    document.getElementById('cartContent').innerHTML = html;
+}
+
+function addToCart(id) {
+    const product = products.find(p => p.id === id);
+    const existing = cart.find(p => p.id === id);
+    if (existing) {
+        existing.qty++;
+    } else {
+        cart.push({...product, qty: 1});
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+}
+
+function removeFromCart(id) {
+    cart = cart.filter(p => p.id !== id);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+    renderCart();
+}
+
+function updateQty(id, qty) {
+    const item = cart.find(p => p.id === id);
+    if (item) item.qty = parseInt(qty) || 1;
+    localStorage.setItem('cart', JSON.stringify(cart));
+    renderCart();
+}
+
+function checkoutWhatsApp() {
+    if (cart.length === 0) return;
+    const total = cart.reduce((sum, p) => sum + (p.price * p.qty), 0);
+    const itemsList = cart.map(p => `${p.name} x${p.qty} - $${(p.price * p.qty).toFixed(2)}`).join('%0A');
+    const msg = `Hello! I'd like to order:%0A%0A${itemsList}%0A%0ATotal: $${total.toFixed(2)}`;
+    window.open(`https://wa.me/?text=${msg}`);
+}
+
+function updateCartCount() {
+    document.getElementById('cartCount').innerText = cart.length;
+}
+
+function adminLogin() {
+    const pwd = document.getElementById('adminPassword').value;
+    if (pwd === adminPassword) {
+        isAdminLoggedIn = true;
+        document.getElementById('adminLogin').classList.add('hidden');
+        document.getElementById('adminDash').classList.remove('hidden');
+        document.getElementById('businessNameInput').value = businessName;
+        document.getElementById('bannerTextInput').value = bannerText;
+        renderProductsList();
+    } else {
+        alert('Invalid password');
+    }
+}
+
+function adminLogout() {
+    isAdminLoggedIn = false;
+    document.getElementById('adminLogin').classList.remove('hidden');
+    document.getElementById('adminDash').classList.add('hidden');
+    document.getElementById('adminPassword').value = '';
+}
+
+function saveBusiness() {
+    businessName = document.getElementById('businessNameInput').value;
+    bannerText = document.getElementById('bannerTextInput').value;
+    localStorage.setItem('businessName', businessName);
+    localStorage.setItem('bannerText', bannerText);
+    document.getElementById('businessName').innerText = businessName;
+    document.getElementById('bannerText').innerText = bannerText;
+    document.getElementById('footerName').innerText = businessName;
+    alert('Saved!');
+}
+
+function addProduct() {
+    const name = document.getElementById('productName').value;
+    const category = document.getElementById('productCategory').value;
+    const price = parseFloat(document.getElementById('productPrice').value);
+    if (name && price) {
+        products.push({ id: Date.now(), name, category, price, emoji: '📦' });
+        localStorage.setItem('products', JSON.stringify(products));
+        document.getElementById('productName').value = '';
+        document.getElementById('productPrice').value = '';
+        renderProductsList();
+    }
+}
+
+function renderProductsList() {
+    const html = products.map(p => `
+        <div style="background:#f9f7f3; padding:1rem; border-radius:8px; margin-bottom:1rem; display:flex; justify-content:space-between;">
+            <div>
+                <div style="font-weight:600">${p.emoji} ${p.name}</div>
+                <div style="font-size:0.9rem; color:#888">${p.category} - $${p.price.toFixed(2)}</div>
+            </div>
+            <button class="btn btn-dark btn-small" onclick="deleteProduct(${p.id})" style="width:auto">Delete</button>
+        </div>
+    `).join('');
+    document.getElementById('productsList').innerHTML = html;
+}
+
+function deleteProduct(id) {
+    products = products.filter(p => p.id !== id);
+    localStorage.setItem('products', JSON.stringify(products));
+    renderProductsList();
+}
+
+document.getElementById('businessName').innerText = businessName;
+document.getElementById('bannerText').innerText = bannerText;
+document.getElementById('footerName').innerText = businessName;
+updateCartCount();
+showPage('landing');
 </script>
 </body>
 </html>
