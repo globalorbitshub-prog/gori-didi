@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gori Didi - Authentic Indian Products</title>
+    <meta name="description" content="Gori Didi brings authentic Indian fashion, textiles and decor - sourced directly from artisans and markets across India - straight to your door.">
+    <meta property="og:title" content="Gori Didi - Authentic Indian Products">
+    <meta property="og:description" content="Authentic Indian fashion, textiles and decor, sourced directly from artisans across India.">
+    <meta property="og:image" content="gori-logo-300.png">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#a42f36">
+    <link rel="icon" href="gori-logo-300.png" type="image/png">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app">
+    <header class="header">
+        <button class="logo-section" onclick="nav('landing')" aria-label="Gori Didi - Home">
+            <img id="logoImg" src="gori-logo-300.png" alt="Gori Didi - from India" class="logo-img" onerror="this.classList.add('hidden'); document.getElementById('logoFallback').classList.remove('hidden')">
+            <span id="logoFallback" class="logo-fallback hidden">GD</span>
+        </button>
+        <button class="nav-toggle" id="navToggle" onclick="toggleNav()" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+        <nav class="nav-main" id="navMain">
+            <button class="nav-btn" onclick="nav('landing')" data-en="Home" data-es="Inicio"></button>
+            <button class="nav-btn" onclick="nav('catalog')" data-en="Products" data-es="Productos"></button>
+            <button class="nav-btn" onclick="openContact()" data-en="Contact" data-es="Contacto"></button>
+        </nav>
+        <div class="nav-right">
+            <select class="lang-select" onchange="switchLang(this.value)" aria-label="Language">
+                <option value="en">English</option>
+                <option value="es">Español</option>
+            </select>
+            <button class="cart-icon" onclick="nav('cart')" aria-label="Cart">🛒<span class="cart-badge" id="cartCount">0</span></button>
+        </div>
+    </header>
+
+    <main class="main">
+        <div id="landing" class="page">
+            <div class="hero" id="hero">
+                <h1 id="heroTitle"></h1>
+                <p id="heroSub"></p>
+                <button class="btn btn-primary" onclick="nav('catalog')" data-en="Shop Now" data-es="Comprar Ahora"></button>
+            </div>
+
+            <div class="trust-strip">
+                <div class="trust-item reveal">
+                    <div class="icon">🧵</div>
+                    <div class="label" data-en="Directly Sourced" data-es="Compra Directa"></div>
+                    <div class="desc" data-en="From artisans and markets across India" data-es="De artesanos y mercados de India"></div>
+                </div>
+                <div class="trust-item reveal">
+                    <div class="icon">✋</div>
+                    <div class="label" data-en="Handmade Quality" data-es="Calidad Artesanal"></div>
+                    <div class="desc" data-en="Traditional craftsmanship, made to last" data-es="Artesanía tradicional y duradera"></div>
+                </div>
+                <div class="trust-item reveal">
+                    <div class="icon">💬</div>
+                    <div class="label" data-en="WhatsApp Support" data-es="Soporte por WhatsApp"></div>
+                    <div class="desc" data-en="Order and ask questions directly" data-es="Pide y pregunta directamente"></div>
+                </div>
+                <div class="trust-item reveal">
+                    <div class="icon">🌍</div>
+                    <div class="label" data-en="Worldwide Shipping" data-es="Envíos al Mundo"></div>
+                    <div class="desc" data-en="Bringing India to your doorstep" data-es="Llevamos India hasta tu puerta"></div>
+                </div>
+            </div>
+
+            <div class="story reveal">
+                <div class="story-content">
+                    <div class="story-text">
+                        <h2 data-en="Our Story" data-es="Nuestra Historia"></h2>
+                        <p id="storyP1"></p>
+                        <p id="storyP2"></p>
+                    </div>
+                    <div class="story-gallery">
+                        <div class="story-thumb"><span class="thumb-icon">🛕</span><img src="6.jpg" alt="Meeting a sadhu at the ancient temple ruins of Hampi" loading="lazy" onerror="this.style.display='none'"></div>
+                        <div class="story-thumb"><span class="thumb-icon">💍</span><img src="3.jpg" alt="Women trying on bangles at an Indian market stall" loading="lazy" onerror="this.style.display='none'"></div>
+                        <div class="story-thumb"><span class="thumb-icon">🧸</span><img src="4.jpg" alt="Colorful wooden toys at a local shop" loading="lazy" onerror="this.style.display='none'"></div>
+                        <div class="story-thumb"><span class="thumb-icon">🐫</span><img src="5.jpg" alt="Travelers with camel near the Jaisalmer fort" loading="lazy" onerror="this.style.display='none'"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title" data-en="Featured Products" data-es="Productos Destacados"></h2>
+            <div class="grid" id="featuredGrid"></div>
+        </div>
+
+        <div id="catalog" class="page hidden">
+            <h1 class="section-title" data-en="Our Collections" data-es="Nuestras Colecciones"></h1>
+            <div class="categories" id="catsContainer"></div>
+            <div class="grid" id="catalogGrid"></div>
+        </div>
+
+        <div id="cart" class="page hidden">
+            <h1 class="section-title" data-en="Shopping Cart" data-es="Carrito de Compras"></h1>
+            <div class="cart-container" id="cartView"></div>
+        </div>
+
+        <div id="admin" class="page hidden">
+            <h1 class="section-title" data-en="Admin Panel" data-es="Panel de Administrador"></h1>
+
+            <div id="loginForm" class="section" style="max-width: 400px;">
+                <h2 class="section-title-2" data-en="Login" data-es="Iniciar Sesión"></h2>
+                <div class="form-group">
+                    <label data-en="Email" data-es="Correo Electrónico"></label>
+                    <input type="email" id="email" placeholder="oscar@gorididi.com">
+                </div>
+                <div class="form-group">
+                    <label data-en="Password" data-es="Contraseña"></label>
+                    <input type="password" id="pwd" placeholder="••••••">
+                </div>
+                <button class="btn btn-primary btn-small" onclick="adminLogin()" data-en="Login" data-es="Entrar"></button>
+                <div class="form-hint" style="margin-top:1rem" data-en="Demo access: oscar@gorididi.com / gori2024" data-es="Acceso de prueba: oscar@gorididi.com / gori2024"></div>
+            </div>
+
+            <div id="adminPanel" class="hidden">
+                <div class="admin-grid">
+                    <div class="section">
+                        <h2 class="section-title-2" data-en="General" data-es="General"></h2>
+                        <div class="form-group">
+                            <label data-en="Business Name" data-es="Nombre del Negocio"></label>
+                            <input type="text" id="bizName">
+                        </div>
+                        <div class="form-group">
+                            <label data-en="WhatsApp Number (with country code)" data-es="Número de WhatsApp (con código de país)"></label>
+                            <input type="text" id="bizWhatsapp" placeholder="15551234567">
+                        </div>
+                        <div class="form-group">
+                            <label data-en="Contact Email" data-es="Correo de Contacto"></label>
+                            <input type="email" id="contactEmail" placeholder="hello@gorididi.com">
+                        </div>
+                        <div class="form-group">
+                            <label data-en="Contact Phone (optional)" data-es="Teléfono de Contacto (opcional)"></label>
+                            <input type="text" id="contactPhone">
+                        </div>
+                        <div class="form-group">
+                            <label data-en="Instagram URL" data-es="URL de Instagram"></label>
+                            <input type="text" id="instagramIn" placeholder="https://www.instagram.com/...">
+                        </div>
+                        <div class="form-group">
+                            <label data-en="Facebook URL" data-es="URL de Facebook"></label>
+                            <input type="text" id="facebookIn" placeholder="https://www.facebook.com/...">
+                        </div>
+                        <button class="btn btn-primary btn-small" onclick="saveBiz()" data-en="Save" data-es="Guardar"></button>
+                    </div>
+
+                    <div class="section">
+                        <h2 class="section-title-2" data-en="Homepage Content" data-es="Contenido de la Portada"></h2>
+                        <div class="form-group">
+                            <label data-en="Hero Title" data-es="Título del Hero"></label>
+                            <input type="text" id="heroTit">
+                        </div>
+                        <div class="form-group">
+                            <label data-en="Hero Subtitle" data-es="Subtítulo del Hero"></label>
+                            <input type="text" id="heroSubIn">
+                        </div>
+                        <div class="form-group">
+                            <label data-en="Our Story - Paragraph 1" data-es="Nuestra Historia - Párrafo 1"></label>
+                            <textarea id="storyP1In" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label data-en="Our Story - Paragraph 2" data-es="Nuestra Historia - Párrafo 2"></label>
+                            <textarea id="storyP2In" rows="3"></textarea>
+                        </div>
+                        <button class="btn btn-primary btn-small" onclick="saveBiz()" data-en="Save" data-es="Guardar"></button>
+                    </div>
+
+                    <div class="section">
+                        <h2 class="section-title-2" data-en="Add Product" data-es="Agregar Producto"></h2>
+                        <div class="form-group">
+                            <label data-en="Product Name" data-es="Nombre del Producto"></label>
+                            <input type="text" id="prodName">
+                        </div>
+                        <div class="form-group">
+                            <label data-en="Category" data-es="Categoría"></label>
+                            <select id="prodCat">
+                                <option>MODA</option>
+                                <option>TRAJES</option>
+                                <option>ACCESORIOS</option>
+                                <option>TEXTIL</option>
+                                <option>DECORACIÓN</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label data-en="Price USD" data-es="Precio USD"></label>
+                            <input type="number" id="prodPrice" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label data-en="Image URL (optional)" data-es="URL de Imagen (opcional)"></label>
+                            <input type="text" id="prodImg" placeholder="https://...">
+                            <div class="form-hint" data-en="Leave empty to use an emoji placeholder" data-es="Déjalo vacío para usar un emoji de referencia"></div>
+                        </div>
+                        <button class="btn btn-primary btn-small" onclick="addProd()" data-en="Add" data-es="Agregar"></button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2 class="section-title-2" data-en="Products" data-es="Productos"></h2>
+                    <div id="prodsList"></div>
+                </div>
+
+                <button class="btn btn-dark btn-small" onclick="adminLogout()" data-en="Logout" data-es="Cerrar Sesión"></button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-col footer-about">
+                <img src="gori-logo-300.png" alt="Gori Didi" class="footer-logo" onerror="this.style.display='none'">
+                <p data-en="Authentic Indian fashion, textiles and decor, sourced directly from artisans across India." data-es="Moda, textiles y decoración auténticos de India, comprados directamente a artesanos."></p>
+                <div class="social-row">
+                    <a href="https://www.instagram.com/gorididifromindia/" target="_blank" rel="noopener" aria-label="Instagram" class="social-btn js-instagram">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+                    </a>
+                    <a href="https://www.facebook.com/gorididifromindia/" target="_blank" rel="noopener" aria-label="Facebook" class="social-btn js-facebook">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M13.5 21v-7.5H16l.5-3.5h-3V7.8c0-1 .3-1.8 1.8-1.8H16.6V2.9c-.3 0-1.4-.1-2.6-.1-2.6 0-4.4 1.6-4.4 4.5v2.7H7v3.5h2.6V21h3.9z"/></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <div class="footer-heading" data-en="Quick Links" data-es="Enlaces"></div>
+                <a href="#" onclick="nav('landing'); return false;" data-en="Home" data-es="Inicio"></a>
+                <a href="#" onclick="nav('catalog'); return false;" data-en="Products" data-es="Productos"></a>
+                <a href="#" onclick="openContact(); return false;" data-en="Contact" data-es="Contacto"></a>
+            </div>
+            <div class="footer-col">
+                <div class="footer-heading" data-en="Get in Touch" data-es="Contacto"></div>
+                <a id="footerEmail" href="mailto:" class="hidden"></a>
+                <a id="footerWhatsapp" href="#" target="_blank" rel="noopener" data-en="WhatsApp" data-es="WhatsApp"></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="year"></span> <span id="footerBrand2">Gori Didi</span></p>
+        </div>
+    </footer>
+</div>
+
+<div id="contactModal" class="modal-overlay hidden" onclick="if(event.target===this) closeContact()">
+    <div class="modal">
+        <button class="modal-close" onclick="closeContact()" aria-label="Close">&times;</button>
+        <h2 data-en="Get in Touch" data-es="Contáctanos"></h2>
+        <div class="contact-list">
+            <a id="contactEmailLink" href="mailto:" class="contact-row">📧 <span id="contactEmailText"></span></a>
+            <a id="contactPhoneLink" href="tel:" class="contact-row">📞 <span id="contactPhoneText"></span></a>
+            <a id="contactWaLink" href="#" target="_blank" rel="noopener" class="contact-row">💬 <span data-en="Chat on WhatsApp" data-es="Chatea por WhatsApp"></span></a>
+        </div>
+        <div class="social-row">
+            <a href="https://www.instagram.com/gorididifromindia/" target="_blank" rel="noopener" aria-label="Instagram" class="social-btn js-instagram">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+            </a>
+            <a href="https://www.facebook.com/gorididifromindia/" target="_blank" rel="noopener" aria-label="Facebook" class="social-btn js-facebook">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M13.5 21v-7.5H16l.5-3.5h-3V7.8c0-1 .3-1.8 1.8-1.8H16.6V2.9c-.3 0-1.4-.1-2.6-.1-2.6 0-4.4 1.6-4.4 4.5v2.7H7v3.5h2.6V21h3.9z"/></svg>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
